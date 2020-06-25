@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .map{
+            width: 600px;
+            height: 600px;
+            background-color: #ccc;
+            position: relative;
+        }
+    </style>
+
+</head>
+<body>
+<div class="map"></div>
+<script src="common.js"></script>
+<script>
+    (function (window){
+        function Random(){
+        }
+        Random.prototype.getRandom = function(min,max){
+          return Math.floor(Math.random()*(max-min)+min);
+        };
+        window.Random = new Random();
+    })(window);//自调用函数
+    // var rs = new Random();
+    // console.log(rs.getRandom(1,5));
+    //产生小方块
+    (function(window){
+        console.log(Random.getRandom(0,5));
+        //选择器的方式获取对象
+        var map = document.querySelector(".map");
+        //食物构造函数
+        function Food(width,height,color){
+            this.width=width||20;
+            this.height=height||20;
+            //横坐标，纵坐标
+            this.x=0;
+            this.y=0;
+            this.color=color;
+            this.element=document.createElement('div');
+        }
+        //初始化小方块的显示效果和位置
+        Food.prototype.init=function(map){
+            //设置样式
+            var div = this.element;
+            div.style.position = "absolute";
+            div.style.width = this.width+"px";
+            div.style.height = this.height+"px";
+            div.style.backgroundColor=this.color;
+            map.appendChild(div);//小方块加到map中
+            this.render(map);
+        };
+        //产生随机位置
+        Food.prototype.render=function(){
+            var x = Random.getRandom(0,map.offsetWidth/this.width)*this.width;
+            var y = Random.getRandom(0,map.offsetHeight/this.height)*this.height;
+            this.x = x;
+            this.y = y;
+            var div = this.element;
+            div.style.left = this.x+"px";
+            div.style.top = this.y+"px";
+        }
+        var fd = new Food(20,20,"green");
+        fd.init(map);
+    })(window);
+</script>
+
+</body>
+</html>
